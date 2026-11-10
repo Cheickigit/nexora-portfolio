@@ -1,0 +1,87 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "nexora/portfolio",
+    "type": "project",
+    "description": "Portfolio & CV builder multi-tenant (Laravel + Livewire).",
+    "keywords": ["laravel", "portfolio", "cv", "livewire"],
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "barryvdh/laravel-dompdf": "^3.1",
+        "laravel/framework": "^12.0",
+        "laravel/tinker": "^2.10",
+        "livewire/livewire": "^3.5"
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.23",
+        "laravel/breeze": "^2.3",
+        "laravel/pail": "^1.2",
+        "laravel/pint": "^1.20",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.5",
+        "phpunit/phpunit": "^11.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        },
+        "files": [
+            "app/Support/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "setup": [
+            "composer install",
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+            "@php artisan key:generate",
+            "npm install --ignore-scripts",
+            "npm run build",
+            "@php artisan migrate --force"
+        ],
+        "dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php artisan serve & npm run dev"
+        ],
+        "test": [
+            "@php artisan config:clear --ansi",
+            "@php artisan test"
+        ],
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi",
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan migrate --graceful --ansi"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
