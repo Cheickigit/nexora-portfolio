@@ -98,6 +98,6 @@
         </div>
     </footer>
 
-    @livewireScriptConfig
+    @livewireScripts
 </body>
 </html>
