@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
+use Livewire\Livewire;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,9 +20,17 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
-{
-    if (config('app.env') === 'production') {
-        \Illuminate\Support\Facades\URL::forceScheme('https');
+    {
+        if (config('app.env') === 'production') {
+            // Force HTTPS pour tous les liens
+            URL::forceScheme('https');
+            
+            // Force Livewire à utiliser la route standard pour les mises à jour
+            // Cela contourne les problèmes de proxy de Railway
+            Livewire::setUpdateRoute(function ($handle) {
+                return \Illuminate\Support\Facades\Route::post('/livewire/update', $handle)
+                    ->middleware('web');
+            });
+        }
     }
-}
 }
