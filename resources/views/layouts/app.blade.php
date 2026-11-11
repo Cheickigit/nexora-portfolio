@@ -98,6 +98,6 @@
         </div>
     </footer>
 
-    @livewireScriptConfig
+    <script src="{{ asset('vendor/livewire/livewire.js') }}" data-csrf="{{ csrf_token() }}"></script>
 </body>
 </html>
